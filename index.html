@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>封装抖动函数</title>
+    </head>   
+    <style type="text/css">
+       #box{
+			width:500px;
+			height:500px;
+			border:1px solid #ddd;
+			position:relative;
+	   }
+	   #child{
+			width:100px;
+			height:100px;
+			background:red;
+			position:absolute;
+			left:38%;
+			top:38%;
+	   }
+    </style>
+    <body>
+       <div id="box"><div id="child"></div></div>
+	   <div id="btn"><input type="button" value="抖动" /></div>
+    </body>
+    <script type="text/javascript">
+		var oDiv = document.getElementById('child');
+	    var btn =document.getElementById('btn');
+		btn.onclick = function(){
+			shake(oDiv,'left');  
+			 
+		} 		 
+		function shake(obj,attr,endFn){
+		    var pos = parseInt(getStyle(obj,attr));
+			var arr = [];
+			var num = 0;
+			for(var i=20; i>0 ;i-=2){
+				arr.push(i,-i);
+			}
+			arr.push(0);
+			clearInterval(obj.timer);
+			obj.timer = setInterval(function(){
+				obj.style[attr] = pos + arr[num] + 'px';
+				num++;
+				if(num==arr.length){
+					clearInterval(obj.timer);
+					endFn &&  endFn();
+				}
+			},20);
+			function getStyle( obj,attr ){
+				return obj.currentStyle ? obj.currentStyle[ attr ] : getComputedStyle(obj)[attr];
+			}      
+
+		}
+		<!-- getComputedStyle  获取css中的对象属性值适用于IE10以上版本及其他现代浏览器-->
+		<!--  currentStyle     兼容所有的IE浏览器 -->
+		
+    </script>  
+</html>
